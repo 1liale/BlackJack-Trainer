@@ -2,12 +2,12 @@ import java.util.ArrayList;
 
 public class BlackJack {
 	static int sets = 1;
-	static double rate = 1.5;
+	static double rate = 2.5;
 	static Shoe shoe = new Shoe(sets);
 
 	public static void main(String[] args) {
 		Dealer dealer = new Dealer();
-		Player player = new Player();
+		Player player = new HumanPlayer(100.0);
 		
 		while (shoe.length() > 6) {
 			ArrayList<PlayerHand> playerHands = player.newHand().play();
@@ -20,21 +20,22 @@ public class BlackJack {
 				int comparison = dealerHand.compareTo(playerHands.get(i));
 				switch (comparison) {
 				case 2:
-					System.out.println("BlackJack! " + player.update(comparison, playerHand.bet()));
+					System.out.println("BlackJack! " + player.win(rate * playerHand.bet()).profit());
 					break;
 				case 1:
-					System.out.println("Player Wins " + player.update(comparison, playerHand.bet()));
+					System.out.println("Player Wins " + player.win(2 * playerHand.bet()).profit());
 					break;
 				case 0:
-					System.out.println("Push " + player.update(comparison, playerHand.bet()));
+					System.out.println("Push " + player.profit());
 					break;
 				case -1:
-					System.out.println("Player Loses " + player.update(comparison, playerHand.bet()));
+					System.out.println("Player Loses "  + player.profit());
 					break;
 				case -2:
-					System.out.println("Player Busts " + player.update(comparison, playerHand.bet()));
+					System.out.println("Player Busts "  + player.profit());
 					break;
 				}
+				
 			}
 		}
 	}

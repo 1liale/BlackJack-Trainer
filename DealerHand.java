@@ -1,7 +1,7 @@
 
 public class DealerHand extends Hand implements Comparable<PlayerHand> {
-	public DealerHand() {
-		super();
+	public DealerHand(Card...cards) {
+		super(cards);
 	}
 
 	@Override

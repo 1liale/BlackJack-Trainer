@@ -2,8 +2,8 @@
 public class Dealer extends BlackJack {
 	private DealerHand hand;
 
-	public Dealer() {
-		hand = new DealerHand();
+	public Dealer(Card...cards) {
+		hand = new DealerHand(cards);
 	}
 
 	public Dealer newHand() {

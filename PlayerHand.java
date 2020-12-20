@@ -1,17 +1,17 @@
 
 public class PlayerHand extends Hand implements Comparable<DealerHand> {
-	private int bet;
+	private double bet;
 
-	public PlayerHand() {
-		super();
+	public PlayerHand(Card...cards) {
+		super(cards);
 		bet = 0;
 	}
 
-	public int bet() {
+	public double bet() {
 		return bet;
 	}
 
-	public int placeBet(int bet) {
+	public double placeBet(double bet) {
 		this.bet += bet;
 		return this.bet;
 	}

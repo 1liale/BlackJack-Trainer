@@ -1,14 +1,17 @@
 import java.util.ArrayList;
 
-public class Hand {
+abstract class Hand {
 	private ArrayList<Card> cards;
 	private int aces;
 	int val;
 
-	public Hand() {
+	public Hand(Card...cards) {
 		val = 0;
 		aces = 0;
-		this.cards = new ArrayList<Card>(3);
+		this.cards = new ArrayList<Card>(Math.max(3, cards.length));
+		for (int i = 0; i < cards.length; i++) {
+			add(cards[i]);
+		}
 	}
 
 	public Hand clear() {
