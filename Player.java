@@ -21,6 +21,7 @@ abstract class Player extends BlackJack {
 	}
 	
 	public abstract ArrayList<PlayerHand> play();
+	public abstract ArrayList<PlayerHand> placeBets();
 	
 	public Player win(double winnings) {
 		bankroll += winnings;
@@ -40,7 +41,7 @@ abstract class Player extends BlackJack {
 	public String toString() {
 		return "[" + profit + " " + bankroll + " " + hands + "]";
 	}
-
+	
 	class InvalidBetException extends Exception {};
 	class BetExceedsBankrollException extends Exception {};
 	PlayerHand placeBet(PlayerHand hand, double bet) throws InvalidBetException, BetExceedsBankrollException{

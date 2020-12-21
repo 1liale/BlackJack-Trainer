@@ -10,9 +10,11 @@ public class BlackJack {
 		Player player = new HumanPlayer(100.0);
 		
 		while (shoe.length() > 6) {
-			dealer.newHand();
-			ArrayList<PlayerHand> playerHands = player.newHand().play();
+			ArrayList<PlayerHand> playerHands = player.newHand().placeBets();
+			System.out.println(dealer.newHand());
+			player.play();
 			DealerHand dealerHand = dealer.play();
+			System.out.println(dealerHand);
 			for (int i = 0; i < playerHands.size(); i++) {
 				int comparison = dealerHand.compareTo(playerHands.get(i));
 				switch (comparison) {

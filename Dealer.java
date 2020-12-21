@@ -9,7 +9,6 @@ public class Dealer extends BlackJack {
 	public Dealer newHand() {
 		hand.clear();
 		hand.add(shoe.draw());
-		System.out.println(hand);
 		return this;
 	}
 
@@ -18,7 +17,6 @@ public class Dealer extends BlackJack {
 			hand.add(shoe.draw());
 		}
 		
-		System.out.println(hand);
 		return hand;
 	}
 

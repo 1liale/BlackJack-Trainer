@@ -12,28 +12,6 @@ public class HumanPlayer extends Player {
 		reader = new BufferedReader(new InputStreamReader(System.in));
 	}
 
-	private ArrayList<PlayerHand> placeBets() {
-		System.out.println("Bankroll: " + bankroll + "  Profit: " + profit);
-		for (int i = 0; i < hands.size(); i++) {
-			double bet = 0.0;
-			System.out.println("How much to bet?");
-				try {
-					input = reader.readLine();
-					bet = Double.parseDouble(input);
-					placeBet(hands.get(i), bet);
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (NumberFormatException|InvalidBetException e) {
-					System.out.println("Invalid bet, please enter again.");
-					i--;
-				} catch (BetExceedsBankrollException e) {
-					System.out.println("Bet exceeds bankroll. Please place a lower bet.");
-					i--;
-				}
-		}
-
-		return hands;
-	}
 	
 	private PlayerHand doubleDown(PlayerHand hand) {
 		System.out.println("Bet: " + hand.bet());
@@ -62,8 +40,31 @@ public class HumanPlayer extends Player {
 	}
 	
 	@Override
+	public ArrayList<PlayerHand> placeBets() {
+		System.out.println("Bankroll: " + bankroll + "  Profit: " + profit);
+		for (int i = 0; i < hands.size(); i++) {
+			double bet = 0.0;
+			System.out.println("How much to bet?");
+				try {
+					input = reader.readLine();
+					bet = Double.parseDouble(input);
+					placeBet(hands.get(i), bet);
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (NumberFormatException|InvalidBetException e) {
+					System.out.println("Invalid bet, please enter again.");
+					i--;
+				} catch (BetExceedsBankrollException e) {
+					System.out.println("Bet exceeds bankroll. Please place a lower bet.");
+					i--;
+				}
+		}
+
+		return hands;
+	}
+	
+	@Override
 	public ArrayList<PlayerHand> play() {
-		hands = placeBets();
 		for (int i = 0; i < hands.size(); i++) {
 			System.out.println(hands.get(i));
 			while (!hands.get(i).isDone()) {
