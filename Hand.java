@@ -2,8 +2,7 @@ import java.util.ArrayList;
 
 abstract class Hand {
 	private ArrayList<Card> cards;
-	private int aces;
-	int val;
+	private int aces, val;
 
 	public Hand(Card...cards) {
 		val = 0;
@@ -21,7 +20,7 @@ abstract class Hand {
 		return this;
 	}
 
-	private void updateVal(Card card) {
+	void updateVal(Card card) {
 		int temp = card.val();
 		val += temp;
 		if (temp == 11) {
@@ -46,6 +45,14 @@ abstract class Hand {
 
 	public int size() {
 		return cards.size();
+	}
+	
+	public int val() {
+		return val;
+	}
+	
+	public Card get(int i) {
+		return cards.get(i);
 	}
 
 	@Override

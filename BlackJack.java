@@ -10,32 +10,31 @@ public class BlackJack {
 		Player player = new HumanPlayer(100.0);
 		
 		while (shoe.length() > 6) {
+			dealer.newHand();
 			ArrayList<PlayerHand> playerHands = player.newHand().play();
-			DealerHand dealerHand = dealer.newHand().play();
-			System.out.println(dealerHand);
-			
+			DealerHand dealerHand = dealer.play();
 			for (int i = 0; i < playerHands.size(); i++) {
-				PlayerHand playerHand = playerHands.get(i);
-				System.out.println(playerHand);
 				int comparison = dealerHand.compareTo(playerHands.get(i));
 				switch (comparison) {
 				case 2:
-					System.out.println("BlackJack! " + player.win(rate * playerHand.bet()).profit());
+					System.out.println("BlackJack!");
+					player.win(rate * playerHands.get(i).bet());
 					break;
 				case 1:
-					System.out.println("Player Wins " + player.win(2 * playerHand.bet()).profit());
+					System.out.println("Player Wins");
+					player.win(2.0 * playerHands.get(i).bet());
 					break;
 				case 0:
-					System.out.println("Push " + player.profit());
+					System.out.println("Push");
+					player.win(playerHands.get(i).bet());
 					break;
 				case -1:
-					System.out.println("Player Loses "  + player.profit());
+					System.out.println("Player Loses");
 					break;
 				case -2:
-					System.out.println("Player Busts "  + player.profit());
+					System.out.println("Player Busts");
 					break;
 				}
-				
 			}
 		}
 	}

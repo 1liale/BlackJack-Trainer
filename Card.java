@@ -21,6 +21,8 @@ public class Card {
 		switch (temp) {
 		case 0: rank = "A";
 		break;
+		case 10: rank = "J";
+		break;
 		case 11: rank = "Q";
 		break;
 		case 12: rank = "K";

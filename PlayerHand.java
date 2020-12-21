@@ -1,25 +1,43 @@
 
 public class PlayerHand extends Hand implements Comparable<DealerHand> {
 	private double bet;
+	private boolean done;
 
 	public PlayerHand(Card...cards) {
 		super(cards);
 		bet = 0;
+		done = false;
 	}
 
 	public double bet() {
 		return bet;
 	}
 
-	public double placeBet(double bet) {
+	public PlayerHand placeBet(double bet) {
 		this.bet += bet;
-		return this.bet;
+		return this;
 	}
-
+	
+	public boolean isDone() {
+		return done;
+	}
+	
+	public PlayerHand done() {
+		done = true;
+		return this;
+	}
+	
+	@Override
+	void updateVal(Card card) {
+		super.updateVal(card);
+		if (val() > 21) {done = true;}
+	}
+	
 	@Override
 	public PlayerHand clear() {
 		super.clear();
 		bet = 0;
+		done = false;
 		return this;
 	}
 
@@ -30,7 +48,7 @@ public class PlayerHand extends Hand implements Comparable<DealerHand> {
 	// 1: Player Wins
 	// 2: Player Wins by BlackJack
 	public int compareTo(DealerHand o) {
-		int val1 = val, val2 = o.val;
+		int val1 = val(), val2 = o.val();
 		if (val1 > 21) {
 			return -2;
 		}

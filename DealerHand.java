@@ -11,7 +11,7 @@ public class DealerHand extends Hand implements Comparable<PlayerHand> {
 	// 1: Player Wins
 	// 2: Player Wins by BlackJack
 	public int compareTo(PlayerHand o) {
-		int val1 = val, val2 = o.val;
+		int val1 = val(), val2 = o.val();
 		if (val2 > 21) {
 			return -2;
 		}
