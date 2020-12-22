@@ -1,43 +1,212 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class BlackJack {
-	static int sets = 1;
-	static double rate = 2.5;
-	static Shoe shoe = new Shoe(sets);
+	private static int sets, reserve;
+	static Shoe shoe;
+	private static double rate;
+	private static Dealer dealer = new Dealer();
+	private static Player[] players;
+	private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+	static Card dealerCard;
 
-	public static void main(String[] args) {
-		Dealer dealer = new Dealer();
-		Player player = new HumanPlayer(100.0);
-		
-		while (shoe.length() > 6) {
-			ArrayList<PlayerHand> playerHands = player.newHand().placeBets();
-			System.out.println(dealer.newHand());
-			player.play();
-			DealerHand dealerHand = dealer.play();
-			System.out.println(dealerHand);
-			for (int i = 0; i < playerHands.size(); i++) {
-				int comparison = dealerHand.compareTo(playerHands.get(i));
-				switch (comparison) {
-				case 2:
-					System.out.println("BlackJack!");
-					player.win(rate * playerHands.get(i).bet());
-					break;
-				case 1:
-					System.out.println("Player Wins");
-					player.win(2.0 * playerHands.get(i).bet());
-					break;
-				case 0:
-					System.out.println("Push");
-					player.win(playerHands.get(i).bet());
-					break;
-				case -1:
-					System.out.println("Player Loses");
-					break;
-				case -2:
-					System.out.println("Player Busts");
+	public static void setUp() {
+		String input;
+		System.out.println("How many sets of decks to play with?");
+		while (true) {
+			try {
+				input = reader.readLine();
+				sets = Integer.parseInt(input);
+				if (sets <= 0) {
+					System.out.println("Please enter a positive integer.");
+				} else {
 					break;
 				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (NumberFormatException e) {
+				System.out.println("Please enter a positive integer.");
 			}
+		}
+
+		shoe = new Shoe(sets);
+
+		System.out.println("What is the payout rate?");
+		System.out.println("1. 3:2\n2. 6:5");
+		while (rate == 0.0) {
+			try {
+				input = reader.readLine().trim();
+				switch (input) {
+				case "1":
+					rate = 2.5;
+					break;
+				case "2":
+					rate = 2.2;
+					break;
+				default:
+					System.out.println("Please enter \"1\" for 3:2 and \"2\" for 6:5.");
+					break;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		System.out.println("How many players?");
+		while (true) {
+			try {
+				input = reader.readLine();
+				int num = Integer.parseInt(input);
+				if (num <= 0) {
+					System.out.println("Please enter a positive integer.");
+				} else {
+					players = new Player[num];
+					break;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (NumberFormatException e) {
+				System.out.println("Please enter a positive integer.");
+			}
+		}
+
+		int minReserve = 5 * (1 + players.length);
+		System.out.println("How deep you want to go down the deck?");
+		System.out.println("Enter as a decimal. e.g. 0.65 for 65%.");
+		while (true) {
+			try {
+				input = reader.readLine();
+				double percentage = Double.parseDouble(input);
+
+				reserve = (int) (52 * sets * (1 - percentage));
+				if (reserve < minReserve) {
+					System.out.println("You may run out of cards mid-round. Please choose a lower deck penetration");
+				} else {
+					break;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (NumberFormatException e) {
+				System.out.println("Please enter a number between 0 and 1.");
+			}
+		}
+	}
+
+	public static void choosePlayer() {
+		for (int i = 0; i < players.length; i++) {
+			int type = 0;
+			System.out.println("What kind of player is player" + i + "?");
+			System.out.println("1. Human");
+			while (true) {
+				try {
+					type = Integer.parseInt(reader.readLine());
+					if (type <= 0 || type > 1) {
+						System.out.println("Please enter a valid integer");
+					} else {
+						break;
+					}
+				} catch (NumberFormatException e) {
+					System.out.println("Please enter a valid integer");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
+			System.out.println("How much bankroll does this player have?");
+			while (true) {
+				try {
+					double bankroll = Double.parseDouble(reader.readLine());
+					if (bankroll <= 0) {
+						System.out.println("Please enter a valid bankroll");
+					} else {
+						switch (type) {
+						case 1:
+							players[i] = new HumanPlayer(bankroll);
+							break;
+						}
+						break;
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (NumberFormatException e) {
+					System.out.println("Please enter a valid bankroll");
+				}
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		setUp();
+		choosePlayer();
+		while (true) {
+			while (shoe.length() > reserve) {
+				DealerHand dealerHand = dealer.newHand().play();
+				dealerCard = dealerHand.get(0);
+				int counter = 0;
+				
+				for (int i = 0; i < players.length; i++) {
+					
+					if (players[i] != null) {
+						System.out.println("Player" + i + ":");
+						players[i].newHand().placeBets();
+					} else {
+						counter++;
+					}
+				}
+				
+				if (counter == players.length) {
+					System.out.println("All players lost their bankroll.");
+					return;
+				}
+
+				for (int i = 0; i < players.length; i++) {
+					if (players[i] != null) {
+						System.out.println("Player" + i + ":");
+						players[i].play(dealerCard);
+					}
+				}
+
+				System.out.println("Dealer: " + dealerHand);
+				for (int i = 0; i < players.length; i++) {
+					Player player = players[i];
+					if (player != null) {
+						System.out.print("Player" + i + ": ");
+						ArrayList<PlayerHand> playerHands = player.hands;
+						for (int j = 0; j < playerHands.size(); j++) {
+							int comparison = dealerHand.compareTo(playerHands.get(j));
+							switch (comparison) {
+							case 2:
+								System.out.println("BlackJack!");
+								player.win(rate * playerHands.get(j).bet());
+								break;
+							case 1:
+								System.out.println("Wins");
+								player.win(2.0 * playerHands.get(j).bet());
+								break;
+							case 0:
+								System.out.println("Push");
+								player.win(playerHands.get(j).bet());
+								break;
+							case -1:
+								System.out.println("Loses");
+								break;
+							case -2:
+								System.out.println("Busts");
+								break;
+							}
+						}
+
+						if (player.bankroll() <= 0) {
+							players[i] = null;
+						}
+					}
+				}
+			}
+			
+			shoe.shuffle();
+			System.out.println("Reshuffling");
 		}
 	}
 }

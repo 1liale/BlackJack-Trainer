@@ -4,7 +4,7 @@ abstract class Player extends BlackJack {
 	ArrayList<PlayerHand> hands;
 	double bankroll, profit;
 
-	public Player(double bankroll, Card...cards) {
+	public Player(double bankroll, Card...cards){
 		this.bankroll = bankroll;
 		profit = 0;
 		hands = new ArrayList<PlayerHand>(1);
@@ -20,7 +20,7 @@ abstract class Player extends BlackJack {
 		return this;
 	}
 	
-	public abstract ArrayList<PlayerHand> play();
+	public abstract ArrayList<PlayerHand> play(Card dealerCard);
 	public abstract ArrayList<PlayerHand> placeBets();
 	
 	public Player win(double winnings) {
@@ -57,7 +57,7 @@ abstract class Player extends BlackJack {
 	PlayerHand doubleDown(PlayerHand hand, double bet) throws InvalidBetException, BetExceedsBankrollException, BetExceedsBetException {
 		if (bet <= 0.0) {throw new InvalidBetException();}
 		if (bet > hand.bet()) {throw new BetExceedsBetException();}
-		if (bankroll < bet) {throw new BetExceedsBankrollException();}
+		if (bankroll == 0 || bankroll < bet) {throw new BetExceedsBankrollException();}
 		bankroll -= bet;
 		profit -= bet;
 		hand.placeBet(hand.bet());

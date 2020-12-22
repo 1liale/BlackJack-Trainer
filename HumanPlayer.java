@@ -12,7 +12,6 @@ public class HumanPlayer extends Player {
 		reader = new BufferedReader(new InputStreamReader(System.in));
 	}
 
-	
 	private PlayerHand doubleDown(PlayerHand hand) {
 		System.out.println("Bet: " + hand.bet());
 		System.out.println("How much to double down?");
@@ -24,7 +23,7 @@ public class HumanPlayer extends Player {
 				doubleDown(hand, bet);
 			} catch (IOException e) {
 				e.printStackTrace();
-			} catch (NumberFormatException|InvalidBetException e) {
+			} catch (NumberFormatException | InvalidBetException e) {
 				System.out.println("Invalid bet, please enter again.");
 				i--;
 			} catch (BetExceedsBankrollException e) {
@@ -35,38 +34,39 @@ public class HumanPlayer extends Player {
 				i--;
 			}
 		}
-		
+
 		return hand;
 	}
-	
+
 	@Override
 	public ArrayList<PlayerHand> placeBets() {
 		System.out.println("Bankroll: " + bankroll + "  Profit: " + profit);
 		for (int i = 0; i < hands.size(); i++) {
 			double bet = 0.0;
 			System.out.println("How much to bet?");
-				try {
-					input = reader.readLine();
-					bet = Double.parseDouble(input);
-					placeBet(hands.get(i), bet);
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (NumberFormatException|InvalidBetException e) {
-					System.out.println("Invalid bet, please enter again.");
-					i--;
-				} catch (BetExceedsBankrollException e) {
-					System.out.println("Bet exceeds bankroll. Please place a lower bet.");
-					i--;
-				}
+			try {
+				input = reader.readLine();
+				bet = Double.parseDouble(input);
+				placeBet(hands.get(i), bet);
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (NumberFormatException | InvalidBetException e) {
+				System.out.println("Invalid bet, please enter again.");
+				i--;
+			} catch (BetExceedsBankrollException e) {
+				System.out.println("Bet exceeds bankroll. Please place a lower bet.");
+				i--;
+			}
 		}
 
 		return hands;
 	}
-	
+
 	@Override
-	public ArrayList<PlayerHand> play() {
+	public ArrayList<PlayerHand> play(Card dealerCard) {
+		System.out.println("Dealer: " + dealerCard);
 		for (int i = 0; i < hands.size(); i++) {
-			System.out.println(hands.get(i));
+			System.out.println("You: " + hands.get(i));
 			while (!hands.get(i).isDone()) {
 				System.out.println("What would you like to do? Press F for help.");
 				try {
@@ -75,13 +75,21 @@ public class HumanPlayer extends Player {
 					e.printStackTrace();
 				}
 				switch (input.toUpperCase()) {
-				case "D": doubleDown(hands.get(i));
-				break;
-				case "H": hit(hands.get(i));
-				break;
-				case "S": stand(hands.get(i));
-				break;
-				case "SP": try {
+				case "D":
+					if (bankroll <= 0) {
+						System.out.println("You don't have enough bankroll to double down.");
+					} else {
+						doubleDown(hands.get(i));
+					}
+					break;
+				case "H":
+					hit(hands.get(i));
+					break;
+				case "S":
+					stand(hands.get(i));
+					break;
+				case "SP":
+					try {
 						split(hands.get(i));
 						System.out.println(hands.get(i));
 					} catch (InvalidSplitException e) {
@@ -89,10 +97,12 @@ public class HumanPlayer extends Player {
 					} catch (BetExceedsBankrollException e) {
 						System.out.println("You don't have enough bankroll to split this hand.");
 					}
-				break;
-				case "F": System.out.println("H to hit. S to stand. D to double down. SP to split.");
-				break;
-				default: System.out.println("Invalid input, please enter again.");
+					break;
+				case "F":
+					System.out.println("H to hit. S to stand. D to double down. SP to split.");
+					break;
+				default:
+					System.out.println("Invalid input, please enter again.");
 				}
 			}
 		}
