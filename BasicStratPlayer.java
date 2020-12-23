@@ -11,6 +11,7 @@ public class BasicStratPlayer extends Player {
         FileIO fileReader = new FileIO();
         this.basicChart = fileReader.getChart();
         this.rowValues = fileReader.getRowValues();
+
         sc = new Scanner(System.in);
         //System.out.println("Basic strat player selected");
     }
@@ -20,22 +21,28 @@ public class BasicStratPlayer extends Player {
         int secondVal = playerHand.get(1).val();
         int playerSum = playerHand.val();
         int upCardVal = dealerHand.val();
-        // System.out.println(playerSum + " " + upCardVal + " " + chartNum);
 
         int i;
-        for (i = 0; i < rowValues.length; i++) {
-            if (rowValues[chartNum][i] == playerSum && chartNum == 0)
+        for (i = 0; i < rowValues[chartNum].length; i++) {
+            if (rowValues[chartNum][i] == playerSum && chartNum == 0){
+                //System.out.println('X');
+                break;}
+            else if ((rowValues[chartNum][i] == secondVal || rowValues[chartNum][i] == firstVal)
+                    && chartNum == 1) {
+                //System.out.println('Y');
                 break;
-            else if (rowValues[chartNum][i] == secondVal && chartNum == 1)
+            }
+            else if ((rowValues[chartNum][i] == secondVal || rowValues[chartNum][i] == firstVal)
+                    && chartNum == 2) {
+                //System.out.println('Z');
                 break;
-            else if (firstVal == secondVal && chartNum == 2)
-                break;
+            }
         }
 
         for (int j = 0; j < basicChart[chartNum][i].length; j++) {
             if (j + 2 == upCardVal) {
+                //System.out.println(i + " " + j + " " + basicChart[chartNum][i][j]);
                 makeDecision(basicChart[chartNum][i][j], playerHand, dealerHand);
-                // System.out.println(basicChart[chartNum][i][j]);
                 break;
             }
         }
@@ -86,17 +93,26 @@ public class BasicStratPlayer extends Player {
             int chartSelection = 0;
             int aces = 0;
             int tempVal = -1;
-            int[] values = new int[hands().get(i).size()];
-
-            for (int j = 0; j < hands().get(i).size(); j++) {
-                values[j] = hands().get(i).get(j).val();
-            }
 
             System.out.println(hands().get(i));
             while (!hands().get(i).isDone()) {
                 // determine which chart to use (hard, soft, or split)
+                //System.out.println(hands().get(i).val() + " " + aces);
+                if (hands().get(i).val() > 17 && aces == 0)
+                {
+                    //System.out.println('S');
+                    makeDecision('S', hands().get(i), dealerHand);
+                    continue;
+                }
+
+                if (hands().get(i).val() < 8 && aces == 0)
+                {
+                    //System.out.println('H');
+                    makeDecision('H', hands().get(i), dealerHand);
+                    continue;
+                }
                 for (int j = 0; j < hands().get(i).size(); j++) {
-                    if (tempVal == hands().get(i).get(j).val() && hands().get(i).size() == 2)
+                    if (tempVal == hands().get(i).get(j).rank() && hands().get(i).size() == 2)
                     {
                         chartSelection = 2;
                         break;
@@ -106,13 +122,8 @@ public class BasicStratPlayer extends Player {
                         aces++;
                         chartSelection = 1;
                     }
-                    tempVal = hands().get(i).get(j).val();
+                    tempVal = hands().get(i).get(j).rank();
                 }
-                if (hands().get(i).val() > 17 && aces == 0)
-                {
-                    makeDecision('S', hands().get(i), dealerHand);
-                }
-
                 applyChart(hands().get(i), dealerHand, chartSelection);
             }
         }
