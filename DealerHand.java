@@ -1,6 +1,5 @@
 
 public class DealerHand extends Hand implements Comparable<PlayerHand> {
-	
 	public DealerHand(Card...cards) {
 		super(cards);
 	}

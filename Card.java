@@ -1,6 +1,5 @@
 
 public class Card {
-
 	private int id;
 	
 	public Card(int id) {

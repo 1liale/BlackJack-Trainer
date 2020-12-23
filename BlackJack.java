@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class BlackJack {
 	private static int sets, reserve;
-	protected static Shoe shoe;
+	private static Shoe shoe;
 	private static double rate;
 	private static Dealer dealer = new Dealer();
 	private static Player[] players;
@@ -139,6 +139,10 @@ public class BlackJack {
 		}
 	}
 
+	public static Shoe shoe() {
+		return shoe;
+	}
+	
 	public static void main(String[] args) {
 		setUp();
 		choosePlayer();
@@ -180,7 +184,7 @@ public class BlackJack {
 					Player player = players[i];
 					if (!player.ruined()) {
 						System.out.println("Player" + i + ": ");
-						ArrayList<PlayerHand> playerHands = player.hands;
+						ArrayList<PlayerHand> playerHands = player.hands();
 						for (int j = 0; j < playerHands.size(); j++) {
 							System.out.println(playerHands.get(j));
 							int comparison = dealerHand.compareTo(playerHands.get(j));

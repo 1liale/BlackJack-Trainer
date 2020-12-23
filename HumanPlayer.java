@@ -40,14 +40,14 @@ public class HumanPlayer extends Player {
 
 	@Override
 	public ArrayList<PlayerHand> placeBets() {
-		System.out.println("Bankroll: " + bankroll + "  Profit: " + profit);
-		for (int i = 0; i < hands.size(); i++) {
+		System.out.println("Bankroll: " + bankroll() + "  Profit: " + profit());
+		for (int i = 0; i < hands().size(); i++) {
 			double bet = 0.0;
 			System.out.println("How much to bet?");
 			try {
 				input = reader.readLine();
 				bet = Double.parseDouble(input);
-				placeBet(hands.get(i), bet);
+				placeBet(hands().get(i), bet);
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (NumberFormatException | InvalidBetException e) {
@@ -59,14 +59,14 @@ public class HumanPlayer extends Player {
 			}
 		}
 
-		return hands;
+		return hands();
 	}
 
 	@Override
 	public ArrayList<PlayerHand> play(DealerHand hand) {
-		for (int i = 0; i < hands.size(); i++) {
-			System.out.println("You: " + hands.get(i));
-			while (!hands.get(i).isDone()) {
+		for (int i = 0; i < hands().size(); i++) {
+			System.out.println("You: " + hands().get(i));
+			while (!hands().get(i).isDone()) {
 				System.out.println("What would you like to do? Press F for help.");
 				try {
 					input = reader.readLine().trim();
@@ -75,22 +75,22 @@ public class HumanPlayer extends Player {
 				}
 				switch (input.toUpperCase()) {
 				case "D":
-					if (bankroll <= 0) {
+					if (bankroll() <= 0) {
 						System.out.println("You don't have enough bankroll to double down.");
 					} else {
-						doubleDown(hands.get(i));
+						doubleDown(hands().get(i));
 					}
 					break;
 				case "H":
-					hit(hands.get(i));
+					hit(hands().get(i));
 					break;
 				case "S":
-					stand(hands.get(i));
+					stand(hands().get(i));
 					break;
 				case "SP":
 					try {
-						split(hands.get(i));
-						System.out.println("You: " + hands.get(i));
+						split(hands().get(i));
+						System.out.println("You: " + hands().get(i));
 					} catch (InvalidSplitException e) {
 						System.out.println("You are not allowed to split this hand.");
 					} catch (BetExceedsBankrollException e) {
@@ -105,6 +105,6 @@ public class HumanPlayer extends Player {
 				}
 			}
 		}
-		return hands;
+		return hands();
 	}
 }

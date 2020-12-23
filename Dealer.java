@@ -8,13 +8,13 @@ public class Dealer extends BlackJack {
 
 	public DealerHand newHand() {
 		hand.clear();
-		hand.add(shoe.draw());
+		hand.add(shoe().draw());
 		return hand;
 	}
 
 	public DealerHand play() {
 		while (hand.val() < 16) {
-			hand.add(shoe.draw());
+			hand.add(shoe().draw());
 		}
 		
 		return hand;

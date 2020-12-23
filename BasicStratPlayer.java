@@ -1,4 +1,3 @@
-import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -83,52 +82,52 @@ public class BasicStratPlayer extends Player {
 
     @Override
     public ArrayList<PlayerHand> play(DealerHand dealerHand) {
-        for (int i = 0; i < hands.size(); i++) {
+        for (int i = 0; i < hands().size(); i++) {
             int chartSelection = 0;
             int aces = 0;
             int tempVal = -1;
-            int[] values = new int[hands.get(i).size()];
+            int[] values = new int[hands().get(i).size()];
 
-            for (int j = 0; j < hands.get(i).size(); j++) {
-                values[j] = hands.get(i).get(j).val();
+            for (int j = 0; j < hands().get(i).size(); j++) {
+                values[j] = hands().get(i).get(j).val();
             }
 
-            System.out.println(hands.get(i));
-            while (!hands.get(i).isDone()) {
+            System.out.println(hands().get(i));
+            while (!hands().get(i).isDone()) {
                 // determine which chart to use (hard, soft, or split)
-                for (int j = 0; j < hands.get(i).size(); j++) {
-                    if (tempVal == hands.get(i).get(j).val() && hands.get(i).size() == 2)
+                for (int j = 0; j < hands().get(i).size(); j++) {
+                    if (tempVal == hands().get(i).get(j).val() && hands().get(i).size() == 2)
                     {
                         chartSelection = 2;
                         break;
                     }
-                    else if (hands.get(i).get(j).val() == 11)
+                    else if (hands().get(i).get(j).val() == 11)
                     {
                         aces++;
                         chartSelection = 1;
                     }
-                    tempVal = hands.get(i).get(j).val();
+                    tempVal = hands().get(i).get(j).val();
                 }
-                if (hands.get(i).val() > 17 && aces == 0)
+                if (hands().get(i).val() > 17 && aces == 0)
                 {
-                    makeDecision('S', hands.get(i), dealerHand);
+                    makeDecision('S', hands().get(i), dealerHand);
                 }
 
-                applyChart(hands.get(i), dealerHand, chartSelection);
+                applyChart(hands().get(i), dealerHand, chartSelection);
             }
         }
-        return hands;
+        return hands();
     }
 
     @Override
     public ArrayList<PlayerHand> placeBets() {
-        System.out.println("Bankroll: " + bankroll + "  Profit: " + profit);
-        for (int i = 0; i < hands.size(); i++) {
+        System.out.println("Bankroll: " + bankroll() + "  Profit: " + profit());
+        for (int i = 0; i < hands().size(); i++) {
             double bet = 0.0;
             System.out.println("How much to bet?");
             try {
                 bet = Double.parseDouble(sc.nextLine());
-                placeBet(hands.get(i), bet);
+                placeBet(hands().get(i), bet);
             } catch (NumberFormatException | InvalidBetException e) {
                 System.out.println("Invalid bet, please enter again.");
                 i--;
@@ -138,6 +137,6 @@ public class BasicStratPlayer extends Player {
             }
         }
 
-        return hands;
+        return hands();
     }
 }

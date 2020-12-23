@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 
 abstract class Player extends BlackJack {
-	protected ArrayList<PlayerHand> hands;
-	protected  double bankroll, profit;
-	protected boolean ruined;
+	private ArrayList<PlayerHand> hands;
+	private  double bankroll, profit;
+	private boolean ruined;
 
 	public Player(double bankroll, Card...cards){
 		this.bankroll = bankroll;
@@ -15,7 +15,7 @@ abstract class Player extends BlackJack {
 
 	public ArrayList<PlayerHand> newHand() {
 		PlayerHand temp = hands.get(0);
-		temp.clear().add(shoe.draw()).add(shoe.draw());
+		temp.clear().add(shoe().draw()).add(shoe().draw());
 		hands.clear();
 		hands.add(temp);
 
@@ -44,6 +44,10 @@ abstract class Player extends BlackJack {
 		return bankroll;
 	}
 	
+	public ArrayList<PlayerHand> hands(){
+		return hands;
+	}
+	
 	@Override
 	public String toString() {
 		return hands.toString();
@@ -68,7 +72,7 @@ abstract class Player extends BlackJack {
 		bankroll -= bet;
 		profit -= bet;
 		hand.placeBet(hand.bet());
-		System.out.println(hand.add(shoe.draw()));
+		System.out.println(hand.add(shoe().draw()));
 		hand.done();
 		return hand;
 	}
@@ -82,16 +86,16 @@ abstract class Player extends BlackJack {
 		profit -= bet;
 		Card card1 = hand.get(0), card2 = hand.get(1);
 		hand.clear().add(card1);
-		hand.add(shoe.draw());
+		hand.add(shoe().draw());
 		hand.placeBet(bet);
 		
-		hands.add(new PlayerHand(card2, shoe.draw()).placeBet(bet));
+		hands.add(new PlayerHand(card2, shoe().draw()).placeBet(bet));
 		
 		return hands;
 	}
 	
 	PlayerHand hit(PlayerHand hand) {
-		System.out.println(hand.add(shoe.draw()));
+		System.out.println(hand.add(shoe().draw()));
 		return hand;
 	}
 	
