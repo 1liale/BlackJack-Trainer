@@ -1,3 +1,10 @@
+
+/**
+ * A human player that asks users for decisions
+ * Author: Yifan Zong
+ * Created on: 23/12/2020
+ */
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,26 +19,26 @@ public class HumanPlayer extends Player {
 		reader = new BufferedReader(new InputStreamReader(System.in));
 	}
 
-	private PlayerHand doubleDown(PlayerHand hand) {
-		System.out.println("Bet: " + hand.bet());
+	// Ask the user for a new bet and double down
+	private PlayerHand doubleDown(PlayerHand hand) throws ZeroBankrollException {
+		// New bet
+		System.out.println("Previous bet: " + hand.bet());
 		System.out.println("How much to double down?");
 		double bet = 0.0;
-		for (int i = 0; i < 1; i++) {
+		while (true) {
 			try {
 				input = reader.readLine();
 				bet = Double.parseDouble(input);
-				doubleDown(hand, bet);
+				doubleDown(hand, bet); // Double down
+				break;
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (NumberFormatException | InvalidBetException e) {
 				System.out.println("Invalid bet, please enter again.");
-				i--;
 			} catch (BetExceedsBankrollException e) {
 				System.out.println("Bet exceeds bankroll. Please place a lower bet.");
-				i--;
 			} catch (BetExceedsBetException e) {
 				System.out.println("Bet exceeds previous bet. Please place a lower bet.");
-				i--;
 			}
 		}
 
@@ -39,6 +46,7 @@ public class HumanPlayer extends Player {
 	}
 
 	@Override
+	// Ask users to place a bet for each of their hands
 	public ArrayList<PlayerHand> placeBets() {
 		System.out.println("Bankroll: " + bankroll() + "  Profit: " + profit());
 		for (int i = 0; i < hands().size(); i++) {
@@ -47,7 +55,7 @@ public class HumanPlayer extends Player {
 			try {
 				input = reader.readLine();
 				bet = Double.parseDouble(input);
-				placeBet(hands().get(i), bet);
+				placeBet(hands().get(i), bet); // Place the bet for a hand
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (NumberFormatException | InvalidBetException e) {
@@ -63,31 +71,37 @@ public class HumanPlayer extends Player {
 	}
 
 	@Override
+	// Ask the user to play each of their hand
 	public ArrayList<PlayerHand> play(DealerHand hand) {
 		for (int i = 0; i < hands().size(); i++) {
-			System.out.println("You: " + hands().get(i));
+			System.out.println(hands().get(i));
+			// Loop until a Hand is done being played
 			while (!hands().get(i).isDone()) {
+				// Ask for player input
 				System.out.println("What would you like to do? Press F for help.");
 				try {
 					input = reader.readLine().trim();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+
 				switch (input.toUpperCase()) {
 				case "D":
-					if (bankroll() <= 0) {
-						System.out.println("You don't have enough bankroll to double down.");
-					} else {
+					//Double down
+					try {
 						doubleDown(hands().get(i));
+					} catch (ZeroBankrollException e) {
+						System.out.println("You don't have enough bankroll to double down.");
 					}
 					break;
 				case "H":
-					hit(hands().get(i));
+					hit(hands().get(i)); // Hit
 					break;
 				case "S":
-					stand(hands().get(i));
+					stand(hands().get(i)); // Stand
 					break;
 				case "SP":
+					// Split
 					try {
 						split(hands().get(i));
 						System.out.println("You: " + hands().get(i));
@@ -105,6 +119,7 @@ public class HumanPlayer extends Player {
 				}
 			}
 		}
+		
 		return hands();
 	}
 }
