@@ -28,7 +28,7 @@ public class PlayerHand extends Hand implements Comparable<DealerHand> {
 	}
 	
 	@Override
-	void updateVal(Card card) {
+	protected void updateVal(Card card) {
 		super.updateVal(card);
 		if (val() > 21) {done = true;}
 	}

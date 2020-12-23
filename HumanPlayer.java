@@ -63,8 +63,7 @@ public class HumanPlayer extends Player {
 	}
 
 	@Override
-	public ArrayList<PlayerHand> play(Card dealerCard) {
-		System.out.println("Dealer: " + dealerCard);
+	public ArrayList<PlayerHand> play(DealerHand hand) {
 		for (int i = 0; i < hands.size(); i++) {
 			System.out.println("You: " + hands.get(i));
 			while (!hands.get(i).isDone()) {
@@ -91,7 +90,7 @@ public class HumanPlayer extends Player {
 				case "SP":
 					try {
 						split(hands.get(i));
-						System.out.println(hands.get(i));
+						System.out.println("You: " + hands.get(i));
 					} catch (InvalidSplitException e) {
 						System.out.println("You are not allowed to split this hand.");
 					} catch (BetExceedsBankrollException e) {

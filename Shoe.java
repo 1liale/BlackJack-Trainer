@@ -1,6 +1,6 @@
 
 public class Shoe {
-	private int size, deckPt;
+	private int size, deckPt, count;
 	private Card[] deck;
 	
 	public Shoe(int size) {
@@ -23,8 +23,11 @@ public class Shoe {
 		}
 		
 		deckPt = 0;
-		
 		return this;
+	}
+	
+	public int count() {
+		return count;
 	}
 	
 	public int length() {
@@ -32,6 +35,8 @@ public class Shoe {
 	}
 	
 	public Card draw() {
-		return deck[deckPt++];
+		Card card = deck[deckPt++];
+		count += card.highLow();
+		return card;
 	}
 }

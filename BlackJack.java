@@ -5,12 +5,11 @@ import java.util.ArrayList;
 
 public class BlackJack {
 	private static int sets, reserve;
-	static Shoe shoe;
+	protected static Shoe shoe;
 	private static double rate;
 	private static Dealer dealer = new Dealer();
 	private static Player[] players;
 	private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-	static Card dealerCard;
 
 	public static void setUp() {
 		String input;
@@ -99,10 +98,11 @@ public class BlackJack {
 			int type = 0;
 			System.out.println("What kind of player is player" + i + "?");
 			System.out.println("1. Human");
+			System.out.println("2. Basic Strat CPU");
 			while (true) {
 				try {
 					type = Integer.parseInt(reader.readLine());
-					if (type <= 0 || type > 1) {
+					if (type <= 0 || type > 2) {
 						System.out.println("Please enter a valid integer");
 					} else {
 						break;
@@ -125,6 +125,8 @@ public class BlackJack {
 						case 1:
 							players[i] = new HumanPlayer(bankroll);
 							break;
+						case 2:
+							players[i] = new BasicStratPlayer(bankroll);
 						}
 						break;
 					}
@@ -140,17 +142,19 @@ public class BlackJack {
 	public static void main(String[] args) {
 		setUp();
 		choosePlayer();
+		System.out.println();
+		
 		while (true) {
 			while (shoe.length() > reserve) {
-				DealerHand dealerHand = dealer.newHand().play();
-				dealerCard = dealerHand.get(0);
+				DealerHand dealerHand = dealer.newHand();
 				int counter = 0;
 				
 				for (int i = 0; i < players.length; i++) {
 					
-					if (players[i] != null) {
+					if (!players[i].ruined()) {
 						System.out.println("Player" + i + ":");
-						players[i].newHand().placeBets();
+						players[i].newHand();
+						players[i].placeBets();
 					} else {
 						counter++;
 					}
@@ -160,49 +164,53 @@ public class BlackJack {
 					System.out.println("All players lost their bankroll.");
 					return;
 				}
-
+				
+				
 				for (int i = 0; i < players.length; i++) {
-					if (players[i] != null) {
+					if (!players[i].ruined()) {
+						System.out.println("Dealer: " + dealerHand);
 						System.out.println("Player" + i + ":");
-						players[i].play(dealerCard);
+						players[i].play(dealerHand);
 					}
 				}
 
+				dealerHand = dealer.play();
 				System.out.println("Dealer: " + dealerHand);
 				for (int i = 0; i < players.length; i++) {
 					Player player = players[i];
-					if (player != null) {
-						System.out.print("Player" + i + ": ");
+					if (!player.ruined()) {
+						System.out.println("Player" + i + ": ");
 						ArrayList<PlayerHand> playerHands = player.hands;
 						for (int j = 0; j < playerHands.size(); j++) {
+							System.out.println(playerHands.get(j));
 							int comparison = dealerHand.compareTo(playerHands.get(j));
 							switch (comparison) {
 							case 2:
 								System.out.println("BlackJack!");
-								player.win(rate * playerHands.get(j).bet());
+								player.update(rate * playerHands.get(j).bet());
 								break;
 							case 1:
 								System.out.println("Wins");
-								player.win(2.0 * playerHands.get(j).bet());
+								player.update(2.0 * playerHands.get(j).bet());
 								break;
 							case 0:
 								System.out.println("Push");
-								player.win(playerHands.get(j).bet());
+								player.update(playerHands.get(j).bet());
 								break;
 							case -1:
 								System.out.println("Loses");
+								player.update(0.0);
 								break;
 							case -2:
 								System.out.println("Busts");
+								player.update(0.0);
 								break;
 							}
 						}
-
-						if (player.bankroll() <= 0) {
-							players[i] = null;
-						}
 					}
 				}
+				
+				System.out.println();
 			}
 			
 			shoe.shuffle();

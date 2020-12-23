@@ -6,10 +6,10 @@ public class Dealer extends BlackJack {
 		hand = new DealerHand(cards);
 	}
 
-	public Dealer newHand() {
+	public DealerHand newHand() {
 		hand.clear();
 		hand.add(shoe.draw());
-		return this;
+		return hand;
 	}
 
 	public DealerHand play() {

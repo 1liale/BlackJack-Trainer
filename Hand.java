@@ -20,7 +20,7 @@ abstract class Hand {
 		return this;
 	}
 
-	void updateVal(Card card) {
+	protected void updateVal(Card card) {
 		int temp = card.val();
 		val += temp;
 		if (temp == 11) {
@@ -32,7 +32,7 @@ abstract class Hand {
 			aces--;
 		}
 	}
-
+	
 	public Hand add(Card card) {
 		cards.add(card);
 		updateVal(card);

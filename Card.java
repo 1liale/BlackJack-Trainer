@@ -7,16 +7,32 @@ public class Card {
 		this.id = id%52;
 	}
 	
+	public int rank() {
+		return id%13;
+	}
+	
+	public int suit() {
+		return id/13;
+	}
+	
 	public int val() {
-		int val = id%13;
+		int val = rank();
 		if (val > 9) {val = 9;}
 		if (val == 0) {val = 10;}
 		return val + 1;
 	}
 	
+	public int highLow() {
+		int rank = rank();
+		
+		if (rank == 0 || rank >= 9) {return -1;}
+		if (rank <= 5) {return 1;}
+		return 0;
+	}
+	
 	@Override
 	public String toString() {
-		int temp = id%13;
+		int temp = rank();
 		String rank = null;
 		switch (temp) {
 		case 0: rank = "A";
@@ -31,7 +47,7 @@ public class Card {
 		break;
 		}
 
-		temp = id/13;
+		temp = suit();
 		String suit = null;
 		switch (temp) {
 		case 0: suit = "\u2666";
