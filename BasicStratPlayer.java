@@ -145,7 +145,7 @@ public class BasicStratPlayer extends Player
 
         for (int j = 0; j < basicChart[chartNum][i].length; j++) {
             if (j + 2 == upCardVal) {
-                System.out.println(i + " " + j + " " + basicChart[chartNum][i][j]);
+                // System.out.println(i + " " + j + " " + basicChart[chartNum][i][j]);
                 makeDecision(basicChart[chartNum][i][j], playerHand, dealerHand);
                 break;
             }
@@ -167,6 +167,7 @@ public class BasicStratPlayer extends Player
                     doubleDown(playerHand, playerHand.bet());
                 } catch (InvalidBetException e) {
                     e.printStackTrace();
+                    System.exit(0);
                 } catch (BetExceedsBankrollException e) {
                     e.printStackTrace();
                 } catch (BetExceedsBetException e) {
@@ -224,7 +225,6 @@ public class BasicStratPlayer extends Player
                     tempVal = hands().get(i).get(j).rank();
                 }
 
-
                 if (hands().get(i).val() == 21 || (hands().get(i).val() > 17 && aces == 0))
                 {
                     //System.out.println('S');
@@ -251,7 +251,7 @@ public class BasicStratPlayer extends Player
         for (int i = 0; i < hands().size(); i++) {
             try
             {
-                if (bankroll() > 2)
+                if (bankroll() >= 2)
                     placeBet(hands().get(i), bet);
                 else {
                     ruined();
