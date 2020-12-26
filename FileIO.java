@@ -3,9 +3,9 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class FileIO {
-    protected char[][][] basicChart;
-    protected int[][] rowValues;
-    protected File myFile;
+    private char[][][] basicChart;
+    private int[][] rowValues;
+    private File myFile;
 
     public FileIO()
     {

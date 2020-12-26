@@ -68,8 +68,8 @@ public class BlackJack {
 			try {
 				input = reader.readLine();
 				int num = Integer.parseInt(input);
-				if (num <= 0) {
-					System.out.println("Please enter a positive integer.");
+				if (num <= 0 || num > 8) {
+					System.out.println("Please enter a positive integer between 1 and 8.");
 				} else {
 					players = new Player[num];
 					break;
@@ -77,7 +77,7 @@ public class BlackJack {
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (NumberFormatException e) {
-				System.out.println("Please enter a positive integer.");
+				System.out.println("Please enter a positive integer between 1 and 8.");
 			}
 		}
 
@@ -89,17 +89,16 @@ public class BlackJack {
 			try {
 				input = reader.readLine();
 				double percentage = Double.parseDouble(input);
-
 				reserve = (int) (52 * sets * (1 - percentage));
-				if (reserve < minReserve) {
+				if (percentage <= 0 || percentage >= 1) {
+					System.out.println("Please enter a number greater than 0 and less than 1.");
+				} else if (reserve < minReserve) {
 					System.out.println("You may run out of cards mid-round. Please choose a lower deck penetration");
-				} else {
-					break;
-				}
+				} else {break;}
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (NumberFormatException e) {
-				System.out.println("Please enter a number between 0 and 1.");
+				System.out.println("Please enter a number greater than 0 and less than 1.");
 			}
 		}
 	}
@@ -116,24 +115,24 @@ public class BlackJack {
 				try {
 					type = Integer.parseInt(reader.readLine());
 					if (type <= 0 || type > 2) {
-						System.out.println("Please enter a valid integer");
+						System.out.println("Please enter a valid integer.");
 					} else {
 						break;
 					}
 				} catch (NumberFormatException e) {
-					System.out.println("Please enter a valid integer");
+					System.out.println("Please enter a valid integer.");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
 
 			//Player bankroll
-			System.out.println("How much bankroll does this player have?");
+			System.out.println("How many betting units does this player have in their bankroll?");
 			while (true) {
 				try {
-					double bankroll = Double.parseDouble(reader.readLine());
+					int bankroll = Integer.parseInt(reader.readLine());
 					if (bankroll <= 0) {
-						System.out.println("Please enter a valid bankroll");
+						System.out.println("Please enter a valid integer.");
 					} else {
 						switch (type) {
 						case 1:
@@ -147,7 +146,7 @@ public class BlackJack {
 				} catch (IOException e) {
 					e.printStackTrace();
 				} catch (NumberFormatException e) {
-					System.out.println("Please enter a valid bankroll");
+					System.out.println("Please enter a valid integer.");
 				}
 			}
 		}
@@ -185,7 +184,7 @@ public class BlackJack {
 				
 				//If all players lost their bankroll, end the game
 				if (counter == players.length) {
-					System.out.println("All players lost their bankroll.");
+					System.out.println("All players are ruined.");
 					return;
 				}
 				

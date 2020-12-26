@@ -1,8 +1,14 @@
+/**
+ * A shoe of cards
+ * Author: Yifan Zong
+ * Created on: 23/12/2020
+ */
 
 public class Shoe {
-	private int size, deckPt, count;
+	private int size, deckPt, runningCount;
 	private Card[] deck;
 	
+	//Create a show of n decks
 	public Shoe(int size) {
 		deckPt = 0;
 		this.size = size;
@@ -14,6 +20,7 @@ public class Shoe {
 		shuffle();
 	}
 	
+	//Reshuffle the shoe
 	public Shoe shuffle() {
 		for (int i = deck.length - 1; i > 1; i--) {
 			int rndPos = (int)(Math.random() * deck.length);
@@ -26,8 +33,18 @@ public class Shoe {
 		return this;
 	}
 	
-	public int count() {
-		return count;
+	//Return the running high-low count
+	public int runningCount() {
+		return runningCount;
+	}
+	
+	//Return the true high-low count
+	public int trueCount() {
+		return runningCount(); 
+	}
+	
+	public int decksRemaining() {
+		return length() / 52;
 	}
 	
 	public int length() {
@@ -36,7 +53,7 @@ public class Shoe {
 	
 	public Card draw() {
 		Card card = deck[deckPt++];
-		count += card.highLow();
+		runningCount += card.highLow();
 		return card;
 	}
 }

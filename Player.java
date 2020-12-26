@@ -33,15 +33,21 @@ abstract class Player extends BlackJack {
 	public Player update(double amount) {
 		bankroll += amount;
 		profit += amount;
-		if (bankroll <= 0) {ruined = true;}
+		if (bankroll <= 0) {updateRuined();}
 		return this;
+	}
+	
+	//Set ruined to true
+	public boolean setRuined() {
+		ruined = true;
+		return ruined;
 	}
 	
 	//Return ruined (whether a player has no bankroll left)
 	public boolean ruined() {
 		return ruined;
-	}
-	
+	}	
+		
 	//Return profit
 	public double profit() {
 		return profit;
@@ -66,9 +72,9 @@ abstract class Player extends BlackJack {
 	//Place a bet for a hand
 	protected class InvalidBetException extends Exception {};
 	protected class BetExceedsBankrollException extends Exception {};
-	protected PlayerHand placeBet(PlayerHand hand, double bet) throws InvalidBetException, BetExceedsBankrollException{
+	protected PlayerHand placeBet(PlayerHand hand, int bet) throws InvalidBetException, BetExceedsBankrollException{
 		//Check if bet is valid and possible
-		if (bet <= 0.0) {throw new InvalidBetException();}
+		if (bet <= 0) {throw new InvalidBetException();}
 		if (bankroll < bet) {throw new BetExceedsBankrollException();}
 		
 		//Update bankroll and profit and place bet
@@ -80,13 +86,9 @@ abstract class Player extends BlackJack {
 	
 	//Double down a hand
 	protected class BetExceedsBetException extends Exception{};
-	protected class ZeroBankrollException extends Exception{};
-	protected PlayerHand doubleDown(PlayerHand hand, double bet) throws InvalidBetException, BetExceedsBankrollException, BetExceedsBetException, ZeroBankrollException {
-		//Check if bankroll is zero
-		if (bankroll <= 0.0) {throw new ZeroBankrollException();}
-		
+	protected PlayerHand doubleDown(PlayerHand hand, int bet) throws InvalidBetException, BetExceedsBankrollException, BetExceedsBetException{
 		//Check if bet is valid and possible
-		if (bet < 0.0) {throw new InvalidBetException();}
+		if (bet <= 0.0) {throw new InvalidBetException();}
 		if (bet > hand.bet()) {throw new BetExceedsBetException();}
 		if (bankroll < bet) {throw new BetExceedsBankrollException();}
 		
@@ -104,7 +106,7 @@ abstract class Player extends BlackJack {
 	protected ArrayList<PlayerHand> split(PlayerHand hand) throws InvalidSplitException, BetExceedsBankrollException{
 		//Check if split is valid and possible
 		if (hand.size() != 2 || hand.get(0).rank() != hand.get(1).rank()) {throw new InvalidSplitException();}
-		double bet = hand.bet();
+		int bet = (int) hand.bet();
 		if (bankroll < bet) {throw new BetExceedsBankrollException();}
 		
 		//Update bankroll and profit and double down
@@ -130,4 +132,5 @@ abstract class Player extends BlackJack {
 	
 	public abstract ArrayList<PlayerHand> play(DealerHand dealerHand);
 	public abstract ArrayList<PlayerHand> placeBets();
+	protected abstract boolean updateRuined();
 }
