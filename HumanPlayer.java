@@ -1,4 +1,3 @@
-
 /**
  * A human player that asks users for decisions
  * Author: Yifan Zong
@@ -18,23 +17,29 @@ public class HumanPlayer extends Player {
 		super(bankroll, cards);
 		reader = new BufferedReader(new InputStreamReader(System.in));
 	}
+	
+	//Player is ruined when they have less than 1 betting ruined
+	protected boolean updateRuined() {
+		if (bankroll() < 1.0) {setRuined();}
+		return ruined();
+	}
 
 	// Ask the user for a new bet and double down
-	private PlayerHand doubleDown(PlayerHand hand) throws ZeroBankrollException {
+	private PlayerHand doubleDown(PlayerHand hand) {
 		// New bet
 		System.out.println("Previous bet: " + hand.bet());
 		System.out.println("How much to double down?");
-		double bet = 0.0;
+		int bet = 0;
 		while (true) {
 			try {
 				input = reader.readLine();
-				bet = Double.parseDouble(input);
+				bet = Integer.parseInt(input);
 				doubleDown(hand, bet); // Double down
 				break;
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (NumberFormatException | InvalidBetException e) {
-				System.out.println("Invalid bet, please enter again.");
+				System.out.println("Invalid bet, please enter a valid integer.");
 			} catch (BetExceedsBankrollException e) {
 				System.out.println("Bet exceeds bankroll. Please place a lower bet.");
 			} catch (BetExceedsBetException e) {
@@ -50,16 +55,16 @@ public class HumanPlayer extends Player {
 	public ArrayList<PlayerHand> placeBets() {
 		System.out.println("Bankroll: " + bankroll() + "  Profit: " + profit());
 		for (int i = 0; i < hands().size(); i++) {
-			double bet = 0.0;
+			int bet;
 			System.out.println("How much to bet?");
 			try {
 				input = reader.readLine();
-				bet = Double.parseDouble(input);
+				bet = Integer.parseInt(input);
 				placeBet(hands().get(i), bet); // Place the bet for a hand
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (NumberFormatException | InvalidBetException e) {
-				System.out.println("Invalid bet, please enter again.");
+				System.out.println("Invalid bet, please an integer betting unit.");
 				i--;
 			} catch (BetExceedsBankrollException e) {
 				System.out.println("Bet exceeds bankroll. Please place a lower bet.");
@@ -87,13 +92,13 @@ public class HumanPlayer extends Player {
 
 				switch (input.toUpperCase()) {
 				case "D":
-					//Double down
-					try {
-						doubleDown(hands().get(i));
-					} catch (ZeroBankrollException e) {
+					// Double down
+					if (bankroll() <= 0.0) {
 						System.out.println("You don't have enough bankroll to double down.");
+					} else {
+						doubleDown(hands().get(i));
+						break;
 					}
-					break;
 				case "H":
 					hit(hands().get(i)); // Hit
 					break;
@@ -119,7 +124,7 @@ public class HumanPlayer extends Player {
 				}
 			}
 		}
-		
+
 		return hands();
 	}
 }

@@ -14,13 +14,12 @@ public class BasicStratPlayer extends Player
     private static final char[][][] basicChart = fileReader.getChart();
     private static final int[][] rowValues = fileReader.getRowValues();
     private Scanner sc;
-    private static double bet;
+    private static int bet = 1;
 
     // Initializes basic strat player
     public BasicStratPlayer(double bankroll, Card... cards) {
         super(bankroll, cards);
         sc = new Scanner(System.in);
-        bet = 1.0;
         //System.out.println("Basic strat player selected");
     }
 
@@ -164,15 +163,13 @@ public class BasicStratPlayer extends Player
             case 'X':
             case 'D':
                 try {
-                    doubleDown(playerHand, playerHand.bet());
+                    doubleDown(playerHand, bet);
                 } catch (InvalidBetException e) {
                     e.printStackTrace();
                     System.exit(0);
                 } catch (BetExceedsBankrollException e) {
                     e.printStackTrace();
                 } catch (BetExceedsBetException e) {
-                    e.printStackTrace();
-                } catch (ZeroBankrollException e) {
                     e.printStackTrace();
                 }
                 break;
@@ -265,4 +262,10 @@ public class BasicStratPlayer extends Player
 
         return hands();
     }
+
+	@Override
+	protected boolean updateRuined() {
+		if (bankroll() < 2 * bet) {setRuined();}
+		return ruined();
+	}
 }
