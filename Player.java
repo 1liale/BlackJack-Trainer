@@ -86,7 +86,7 @@ abstract class Player extends BlackJack {
 		if (bankroll <= 0.0) {throw new ZeroBankrollException();}
 		
 		//Check if bet is valid and possible
-		if (bet <= 0.0) {throw new InvalidBetException();}
+		if (bet < 0.0) {throw new InvalidBetException();}
 		if (bet > hand.bet()) {throw new BetExceedsBetException();}
 		if (bankroll < bet) {throw new BetExceedsBankrollException();}
 		

@@ -14,11 +14,13 @@ public class BasicStratPlayer extends Player
     private static final char[][][] basicChart = fileReader.getChart();
     private static final int[][] rowValues = fileReader.getRowValues();
     private Scanner sc;
+    private static double bet;
 
     // Initializes basic strat player
     public BasicStratPlayer(double bankroll, Card... cards) {
         super(bankroll, cards);
         sc = new Scanner(System.in);
+        bet = 1.0;
         //System.out.println("Basic strat player selected");
     }
 
@@ -143,7 +145,7 @@ public class BasicStratPlayer extends Player
 
         for (int j = 0; j < basicChart[chartNum][i].length; j++) {
             if (j + 2 == upCardVal) {
-                //System.out.println(i + " " + j + " " + basicChart[chartNum][i][j]);
+                System.out.println(i + " " + j + " " + basicChart[chartNum][i][j]);
                 makeDecision(basicChart[chartNum][i][j], playerHand, dealerHand);
                 break;
             }
@@ -176,11 +178,15 @@ public class BasicStratPlayer extends Player
             case 'O':
             case 'Y':
                 try {
+                    // for (Hand hand : hands())
+                        // System.out.println("split:" + hand);
                     split(playerHand);
                 } catch (InvalidSplitException e) {
                     e.printStackTrace();
+                    System.exit(0);
                 } catch (BetExceedsBankrollException e) {
                     e.printStackTrace();
+                    System.exit(0);
                 }
                 break;
             case 'N':
@@ -191,16 +197,16 @@ public class BasicStratPlayer extends Player
                 break;
         }
     }
-    
+
     @Override
     public ArrayList<PlayerHand> play(DealerHand dealerHand) {
         for (int i = 0; i < hands().size(); i++) {
-            int chartSelection = 0;
-            int aces = 0;
-            int tempVal = -1;
 
             System.out.println(hands().get(i));
             while (!hands().get(i).isDone()) {
+                int tempVal = -1;
+                int chartSelection = 0;
+                int aces = 0;
                 // determine which chart to use (hard, soft, or split)
 
                 //System.out.println(hands().get(i).val() + " " + aces);
@@ -218,7 +224,8 @@ public class BasicStratPlayer extends Player
                     tempVal = hands().get(i).get(j).rank();
                 }
 
-                if (hands().get(i).val() > 17 && aces == 0)
+
+                if (hands().get(i).val() == 21 || (hands().get(i).val() > 17 && aces == 0))
                 {
                     //System.out.println('S');
                     makeDecision('S', hands().get(i), dealerHand);
@@ -231,8 +238,8 @@ public class BasicStratPlayer extends Player
                     makeDecision('H', hands().get(i), dealerHand);
                     continue;
                 }
-
                 applyChart(hands().get(i), dealerHand, chartSelection);
+
             }
         }
         return hands();
@@ -242,17 +249,17 @@ public class BasicStratPlayer extends Player
     public ArrayList<PlayerHand> placeBets() {
         System.out.println("Bankroll: " + bankroll() + "  Profit: " + profit());
         for (int i = 0; i < hands().size(); i++) {
-            double bet = 0.0;
-            System.out.println("How much to bet?");
-            try {
-                bet = Double.parseDouble(sc.nextLine());
-                placeBet(hands().get(i), bet);
+            try
+            {
+                if (bankroll() > 2)
+                    placeBet(hands().get(i), bet);
+                else {
+                    ruined();
+                }
             } catch (NumberFormatException | InvalidBetException e) {
-                System.out.println("Invalid bet, please enter again.");
-                i--;
+                e.printStackTrace();
             } catch (BetExceedsBankrollException e) {
-                System.out.println("Bet exceeds bankroll. Please place a lower bet.");
-                i--;
+                e.printStackTrace();
             }
         }
 
