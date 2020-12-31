@@ -13,7 +13,7 @@ More specifically: Hit on hard 17 (H17), 3:2 blackjack payout, Double-Down-after
 Does not allow surrender.
 
 ## How to play:
-[link to official rules](https://www.blackjack.org/blackjack-rules/)
+[Link to basic rules](https://youtu.be/dQw4w9WgXcQ?t=22)
 
 First choose the number of decks in the playing shoe, the deck penetration, and the number of players in the game.
 
@@ -31,7 +31,7 @@ Use card counting to play according to the basic strat and the illustrious 18 de
 Bet according to a user specified betting spread.
 Note that card counting player does not quit even with a true count below D1.
 (incorporating both Basic Strat and Card Counting strategies to decide best course of action as well as betting units)
-[Click to learn more about card counting](https://youtu.be/dQw4w9WgXcQ)
+[Click to learn more about card counting](https://www.youtube.com/watch?v=SHK2C-QQR-k)
 
 
 ## Project Specifications:
