@@ -16,7 +16,7 @@ public class FileIO {
     // initialize basicChart and rowValues
     public FileIO()
     {
-        myFile = new File("BasicStrat.txt");
+        myFile = new File("BlackJackStrat.txt");
         basicChart = new char[3][10][10];
         rowValues = new int[3][10];
         readFile();
