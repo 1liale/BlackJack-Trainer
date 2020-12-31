@@ -27,7 +27,14 @@ There are 3 different selectable modes:
 	
 ## Setup
 ```
-$ download as zip folder or git clone https://github.com/1liale/BlackJack-Trainer.git
+option 1:
+
+$ download as zip folder
 $ run in ide such as Eclipse or IntelliJ   
+
+option 2:
+$ git clone https://github.com/1liale/BlackJack-Trainer.git
+$ open terminal and go to repo
+$ java -jar "BlackJackTrainer.jar"
 
 ```
