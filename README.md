@@ -6,7 +6,7 @@
 This project is meant to be used solely for the educational purpose of learning the game of BlackJack
 using the standard casino rules. 
 
-## How to play:
+## How to play: [link to official rules](https://www.blackjack.org/blackjack-rules/)
 There are 3 different selectable modes:
 ### 1. Human player: allows you to play as the default human player
 
@@ -27,7 +27,7 @@ There are 3 different selectable modes:
 	
 ## Setup
 ```
-$ download as zip folder
+$ download as zip folder or git clone https://github.com/1liale/BlackJack-Trainer.git
 $ run in ide such as Eclipse or IntelliJ   
 
 ```
