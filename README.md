@@ -4,6 +4,7 @@
 
 ## Documentation
 [Link to JavaDoc API](https://1liale.github.io/BlackJack-Trainer/)
+For deatails check src code.
 
 ## General info:
 This project is designed to help players learn the basic strategy and card counting strategy in Blackjack.
