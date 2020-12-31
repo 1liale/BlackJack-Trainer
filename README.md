@@ -10,12 +10,13 @@ For deatails check src code.
 This project is designed to help players learn the basic strategy and card counting strategy in Blackjack.
 Can also be used to simulate the risk of ruins of various betting spreads.
 Uses the "standard" casino rules.
+[Link to basic rules](https://youtu.be/dQw4w9WgXcQ?t=22)
+
 More specifically: Hit on hard 17 (H17), 3:2 blackjack payout, Double-Down-after-Split (DDAS), Resplit Aces (RAS).
+
 Does not allow surrender.
 
 ## How to play:
-[Link to basic rules](https://youtu.be/dQw4w9WgXcQ?t=22)
-
 First choose the number of decks in the playing shoe, the deck penetration, and the number of players in the game.
 
 There are 3 different selectable players:
