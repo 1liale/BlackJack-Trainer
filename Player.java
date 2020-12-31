@@ -1,3 +1,4 @@
+
 /**
  * A Player of Blackjack
  * Author: Yifan Zong
@@ -5,132 +6,204 @@
  */
 import java.util.ArrayList;
 
-abstract class Player extends BlackJack {
+abstract class Player {
 	private ArrayList<PlayerHand> hands;
-	private  double bankroll, profit;
+	private double bankroll, profit;
 	private boolean ruined;
 
-	//Set profit, bankroll to zero, ruined to false, and create a new empty ArrayList of hands
-	public Player(double bankroll, Card...cards){
+	// Set profit, bankroll to zero, ruined to false, and create a new empty
+	// ArrayList of hands
+	public Player(double bankroll) {
 		this.bankroll = bankroll;
 		profit = 0;
 		hands = new ArrayList<PlayerHand>(1);
-		hands.add(new PlayerHand(cards));
+		hands.add(new PlayerHand());
 		ruined = false;
 	}
 
-	//Draw two cards for a new hand
-	public ArrayList<PlayerHand> newHand() {
+	// Clear and leave one empty hand
+	public Player clearHands() {
 		PlayerHand temp = hands.get(0);
-		temp.clear().add(shoe().draw()).add(shoe().draw());
+		temp.clear();
 		hands.clear();
 		hands.add(temp);
+		return this;
+	}
+
+	// Put 2 cards into the empty hand
+	public ArrayList<PlayerHand> newHand() {
+		hands.get(0).add(Blackjack.shoe().draw()).add(Blackjack.shoe().draw());
 		return hands;
 	}
-	
-	//Update the bankroll and profit given an amount.
-	//Must be called after every round to update ruined
+
+	// Update the bankroll and profit given an amount and reset the hand
+	// Must be called after every round to update ruined
 	public Player update(double amount) {
 		bankroll += amount;
 		profit += amount;
-		if (bankroll <= 0) {updateRuined();}
+		updateRuined();
 		return this;
 	}
-	
-	//Set ruined to true
-	public boolean setRuined() {
+
+	// Set ruined to true
+	protected boolean setRuined() {
 		ruined = true;
 		return ruined;
 	}
-	
-	//Return ruined (whether a player has no bankroll left)
+
+	// Return ruined (whether a player has no bankroll left)
 	public boolean ruined() {
 		return ruined;
-	}	
-		
-	//Return profit
+	}
+
+	// Return profit
 	public double profit() {
 		return profit;
 	}
-	
-	//Return bankroll
+
+	// Return bankroll
 	public double bankroll() {
 		return bankroll;
 	}
-	
-	//Return hands
-	public ArrayList<PlayerHand> hands(){
+
+	// Return hands
+	public ArrayList<PlayerHand> hands() {
 		return hands;
 	}
-	
+
+	// True if all hands have busted
+	public boolean busted() {
+		boolean temp = true;
+		for (int i = 0; i < hands.size(); i++) {
+			temp = temp && hands.get(i).busted();
+		}
+		return temp;
+	}
+
 	@Override
-	//Return hands as a string
+	// Return hands as a string
 	public String toString() {
 		return hands.toString();
 	}
-	
-	//Place a bet for a hand
-	protected class InvalidBetException extends Exception {};
-	protected class BetExceedsBankrollException extends Exception {};
-	protected PlayerHand placeBet(PlayerHand hand, int bet) throws InvalidBetException, BetExceedsBankrollException{
-		//Check if bet is valid and possible
-		if (bet <= 0) {throw new InvalidBetException();}
-		if (bankroll < bet) {throw new BetExceedsBankrollException();}
-		
-		//Update bankroll and profit and place bet
+
+	// Place a bet for a hand
+	protected class InvalidBetException extends Exception {
+	};
+
+	protected class ExceedsBankrollException extends Exception {
+	};
+
+	protected PlayerHand placeBet(PlayerHand hand, double bet) throws InvalidBetException, ExceedsBankrollException {
+		// Check if bet is valid and possible
+		if (bet <= 0.0) {
+			throw new InvalidBetException();
+		}
+		if (bankroll < bet) {
+			throw new ExceedsBankrollException();
+		}
+
+		// Update bankroll and profit and place bet
 		bankroll -= bet;
 		profit -= bet;
 		hand.placeBet(bet);
 		return hand;
 	}
-	
-	//Double down a hand
-	protected class BetExceedsBetException extends Exception{};
-	protected PlayerHand doubleDown(PlayerHand hand, int bet) throws InvalidBetException, BetExceedsBankrollException, BetExceedsBetException{
-		//Check if bet is valid and possible
-		if (bet <= 0.0) {throw new InvalidBetException();}
-		if (bet > hand.bet()) {throw new BetExceedsBetException();}
-		if (bankroll < bet) {throw new BetExceedsBankrollException();}
-		
-		//Update bankroll and profit and double down
-		bankroll -= bet;
-		profit -= bet;
-		hand.placeBet(hand.bet());
-		System.out.println(hand.add(shoe().draw()));
-		hand.done(); //Hand is done after doubling down
+
+	// Place insurance for a hand
+	protected PlayerHand placeInsurance(PlayerHand hand) throws ExceedsBankrollException {
+		double amount = hand.bet() / 2.0;
+		if (bankroll < amount) {
+			throw new ExceedsBankrollException();
+		}
+		bankroll -= amount;
+		profit -= amount;
+		hand.placeInsurance();
 		return hand;
 	}
-	
-	//Split a Hand
-	protected class InvalidSplitException extends Exception{};
-	protected ArrayList<PlayerHand> split(PlayerHand hand) throws InvalidSplitException, BetExceedsBankrollException{
-		//Check if split is valid and possible
-		if (hand.size() != 2 || hand.get(0).rank() != hand.get(1).rank()) {throw new InvalidSplitException();}
-		int bet = (int) hand.bet();
-		if (bankroll < bet) {throw new BetExceedsBankrollException();}
-		
-		//Update bankroll and profit and double down
+
+	// Double down a hand
+	protected class ExceedsBetException extends Exception {
+	};
+
+	protected class InvalidDoubleDownException extends Exception {
+	};
+
+	protected PlayerHand doubleDown(PlayerHand hand, double bet)
+			throws InvalidBetException, ExceedsBankrollException, ExceedsBetException, InvalidDoubleDownException {
+		// Check if double down is valid and possible
+		if (hand.size() != 2) {
+			throw new InvalidDoubleDownException();
+		}
+		if (bet <= 0.0) {
+			throw new InvalidBetException();
+		}
+		if (bet > hand.bet()) {
+			throw new ExceedsBetException();
+		}
+		if (bankroll < bet) {
+			throw new ExceedsBankrollException();
+		}
+
+		// Update bankroll and profit and double down
+		bankroll -= bet;
+		profit -= bet;
+		hand.placeBet((int) hand.bet() + bet);
+		System.out.print(hand.add(Blackjack.shoe().draw()));
+		if (hand.busted()) {
+			System.out.println(" Bust");
+		} else {
+			System.out.println();
+		}
+		hand.done(); // Hand is done after doubling down
+		return hand;
+	}
+
+	// Split a Hand
+	protected class InvalidSplitException extends Exception {
+	};
+
+	protected ArrayList<PlayerHand> split(PlayerHand hand) throws InvalidSplitException, ExceedsBankrollException {
+		// Check if split is valid and possible
+		if (hand.size() != 2 || hand.get(0).rank() != hand.get(1).rank()) {
+			throw new InvalidSplitException();
+		}
+		double bet = hand.bet();
+		if (bankroll < bet) {
+			throw new ExceedsBankrollException();
+		}
+
+		// Update bankroll and profit and double down
 		bankroll -= bet;
 		profit -= bet;
 		Card card1 = hand.get(0), card2 = hand.get(1);
-		hand.clear().add(card1).add(shoe().draw());
+		System.out.println(hand.clear().add(card1).add(Blackjack.shoe().draw()));
 		hand.placeBet(bet);
-		hands.add(new PlayerHand(card2, shoe().draw()).placeBet(bet));
+		hands.add(new PlayerHand(card2, Blackjack.shoe().draw()).placeBet(bet));
 		return hands;
 	}
-	
-	//Hit, draw a new card
+
+	// Hit, draw a new card
 	protected PlayerHand hit(PlayerHand hand) {
-		System.out.println(hand.add(shoe().draw()));
+		System.out.print(hand.add(Blackjack.shoe().draw()));
+		if (hand.busted()) {
+			System.out.println(" Bust");
+			hand.done();
+		} else {
+			System.out.println();
+		}
 		return hand;
 	}
-	
-	//Stand, hand is done
+
+	// Stand, hand is done
 	protected PlayerHand stand(PlayerHand hand) {
 		return hand.done();
 	}
-	
-	public abstract ArrayList<PlayerHand> play(DealerHand dealerHand);
+
 	public abstract ArrayList<PlayerHand> placeBets();
+
+	public abstract ArrayList<PlayerHand> placeInsurances();
+
+	public abstract ArrayList<PlayerHand> play(Card dealerCard);
+
 	protected abstract boolean updateRuined();
 }

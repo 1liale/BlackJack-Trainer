@@ -3,13 +3,13 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class FileIO {
-    private char[][][] basicChart;
-    private int[][] rowValues;
-    private File myFile;
+    protected char[][][] basicChart;
+    protected int[][] rowValues;
+    protected File myFile;
 
     public FileIO()
     {
-        myFile = new File("BlackJackStrat.txt");
+        myFile = new File("BasicStrat.txt");
         basicChart = new char[3][10][10];
         rowValues = new int[3][10];
         readFile();
@@ -53,7 +53,7 @@ public class FileIO {
 
             sc.close();
         } catch (FileNotFoundException e) {
-            System.out.println("BlackJackStrat.txt not found");
+            System.out.println("BasicStrat.txt not found");
             e.printStackTrace();
         }
     }

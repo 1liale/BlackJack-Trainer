@@ -2,7 +2,7 @@
  * Card object Require UTF8 encoding to view properly Author: Yifan Zong Created
  * on: 23/12/2020
  */
-public class Card {
+public class Card{
 	private int id;
 
 	// A Card is identified by an integer between 0 to 51
@@ -20,8 +20,7 @@ public class Card {
 		return id / 13;
 	}
 
-	// Value of a numbered card is their face value, J/Q/K are 10, A is either 1 or
-	// 11
+	// Value of a numbered card is their face value, J/Q/K are 10, A is either 1 or 11
 	public int val() {
 		int val = rank();
 		if (val > 9) {

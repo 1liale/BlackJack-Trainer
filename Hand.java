@@ -8,11 +8,13 @@ import java.util.ArrayList;
 abstract class Hand {
 	private ArrayList<Card> cards;
 	private int aces, val;
+	private boolean busted;
 
 	//Initialize the value, number of aces, and an ArrayList of Cards
 	public Hand(Card...cards) {
 		val = 0;
 		aces = 0;
+		busted = false;
 		this.cards = new ArrayList<Card>(Math.max(3, cards.length));
 		for (int i = 0; i < cards.length; i++) {
 			add(cards[i]);
@@ -23,6 +25,7 @@ abstract class Hand {
 	public Hand clear() {
 		val = 0;
 		aces = 0;
+		busted = false;
 		cards.clear();
 		return this;
 	}
@@ -38,9 +41,14 @@ abstract class Hand {
 		}
 
 		//If value exceeds 21 and there are aces, make the ace represent 1 instead of 11
-		while ((aces > 0) && (val > 21)) {
+		while (aces > 0 && val > 21) {
 			val -= 10;
 			aces--;
+		}
+		
+		//If value exceeds 21 and there are no aces, players busts
+		if (val > 21) {
+			busted = true;
 		}
 	}
 	
@@ -66,8 +74,19 @@ abstract class Hand {
 		return val;
 	}
 	
+	//Return the card at index i
 	public Card get(int i) {
 		return cards.get(i);
+	}
+	
+	//Return the number of aces
+	public int aces() {
+		return aces;
+	}
+	
+	//Return whether a hand has busted
+	public boolean busted() {
+		return busted;
 	}
 	
 	@Override

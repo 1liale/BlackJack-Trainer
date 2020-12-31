@@ -14,14 +14,8 @@ public class HumanPlayer extends Player {
 	private String input;
 
 	public HumanPlayer(double bankroll, Card... cards) {
-		super(bankroll, cards);
+		super(bankroll);
 		reader = new BufferedReader(new InputStreamReader(System.in));
-	}
-	
-	//Player is ruined when they have less than 1 betting ruined
-	protected boolean updateRuined() {
-		if (bankroll() < 1.0) {setRuined();}
-		return ruined();
 	}
 
 	// Ask the user for a new bet and double down
@@ -38,22 +32,30 @@ public class HumanPlayer extends Player {
 				break;
 			} catch (IOException e) {
 				e.printStackTrace();
+			} catch (InvalidDoubleDownException e) {
+				System.out.println("You are not allowed to double down.");
 			} catch (NumberFormatException | InvalidBetException e) {
 				System.out.println("Invalid bet, please enter a valid integer.");
-			} catch (BetExceedsBankrollException e) {
+			} catch (ExceedsBankrollException e) {
 				System.out.println("Bet exceeds bankroll. Please place a lower bet.");
-			} catch (BetExceedsBetException e) {
+			} catch (ExceedsBetException e) {
 				System.out.println("Bet exceeds previous bet. Please place a lower bet.");
 			}
 		}
 
 		return hand;
 	}
+	
+	@Override
+	//Player is ruined when they have less than 1 betting unit
+	protected boolean updateRuined() {
+		if (bankroll() < 1.0) {setRuined();}
+		return ruined();
+	}
 
 	@Override
-	// Ask users to place a bet for each of their hands
+	// Ask ther user to place a bet for each of their hands
 	public ArrayList<PlayerHand> placeBets() {
-		System.out.println("Bankroll: " + bankroll() + "  Profit: " + profit());
 		for (int i = 0; i < hands().size(); i++) {
 			int bet;
 			System.out.println("How much to bet?");
@@ -66,7 +68,7 @@ public class HumanPlayer extends Player {
 			} catch (NumberFormatException | InvalidBetException e) {
 				System.out.println("Invalid bet, please an integer betting unit.");
 				i--;
-			} catch (BetExceedsBankrollException e) {
+			} catch (ExceedsBankrollException e) {
 				System.out.println("Bet exceeds bankroll. Please place a lower bet.");
 				i--;
 			}
@@ -74,10 +76,41 @@ public class HumanPlayer extends Player {
 
 		return hands();
 	}
+	
+
+	@Override
+	//Ask the user to place an insurance;
+	public ArrayList<PlayerHand> placeInsurances(){
+		for (int i = 0; i < hands().size(); i++) {
+			System.out.println(hands().get(i));
+			System.out.println("Place an insurance? 1. Yes 2. No");
+			try {
+				int input;
+				input = Integer.parseInt(reader.readLine());
+				switch (input) {
+				case 1: placeInsurance(hands().get(i));
+				break;
+				case 2: break;
+				default: System.out.println("Please enter either \"1\" or \"2\".");
+				i--;
+				break;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (NumberFormatException e) {
+				System.out.println("Please enter either \"1\" or \"2\".");
+				i--;
+			} catch (ExceedsBankrollException e) {
+				System.out.println("Not enough bankroll to place insurance");
+			}
+		}
+		
+		return hands();
+	}
 
 	@Override
 	// Ask the user to play each of their hand
-	public ArrayList<PlayerHand> play(DealerHand hand) {
+	public ArrayList<PlayerHand> play(Card dealerCard) {
 		for (int i = 0; i < hands().size(); i++) {
 			System.out.println(hands().get(i));
 			// Loop until a Hand is done being played
@@ -109,15 +142,24 @@ public class HumanPlayer extends Player {
 					// Split
 					try {
 						split(hands().get(i));
-						System.out.println("You: " + hands().get(i));
 					} catch (InvalidSplitException e) {
 						System.out.println("You are not allowed to split this hand.");
-					} catch (BetExceedsBankrollException e) {
+					} catch (ExceedsBankrollException e) {
 						System.out.println("You don't have enough bankroll to split this hand.");
 					}
 					break;
+				case "B":
+					//Basic Player Strat
+					System.out.println("Optimal move: " + BasicStratPlayer.getNextMove(hands().get(i), dealerCard));
+					break;
+				case "C":
+					//Card Counter Strat
+					System.out.println("Running count: " + Blackjack.shoe().runningCount());
+					System.out.println("Decks Remaining: " +  Blackjack.shoe().decksRemaining() + " True count: " +  Blackjack.shoe().trueCount());
+					System.out.println("Optimal move: " + CardCountingPlayer.getNextMove(hands().get(i), dealerCard));
+					break;
 				case "F":
-					System.out.println("H to hit. S to stand. D to double down. SP to split.");
+					System.out.println("H to hit. S to stand. D to double down. SP to split. B to consult basic strategy. C to consult card counting strategy.");
 					break;
 				default:
 					System.out.println("Invalid input, please enter again.");
