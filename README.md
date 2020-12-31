@@ -2,6 +2,9 @@
 
 ### Made By: Alex Li and Yifan Zong 
 
+## Documentation
+[Link to JavaDoc API](https://1liale.github.io/BlackJack-Trainer/)
+
 ## General info:
 This project is meant to be used solely for the educational purpose of learning the game of BlackJack
 using the standard casino rules. 
