@@ -14,6 +14,7 @@ Does not allow surrender.
 
 ## How to play:
 [link to official rules](https://www.blackjack.org/blackjack-rules/)
+
 First choose the number of decks in the playing shoe, deck penetration, and the number of players in the game.
 
 There are 3 different selectable players:
