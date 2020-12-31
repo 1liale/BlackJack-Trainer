@@ -15,7 +15,7 @@ Does not allow surrender.
 ## How to play:
 [link to official rules](https://www.blackjack.org/blackjack-rules/)
 
-First choose the number of decks in the playing shoe, deck penetration, and the number of players in the game.
+First choose the number of decks in the playing shoe, the deck penetration, and the number of players in the game.
 
 There are 3 different selectable players:
 ### 1. Human player: allows you to control all betting and playing decisions.
@@ -27,7 +27,7 @@ There are 3 different selectable players:
 ![alt text](https://www.blackjackapprenticeship.com/wp-content/uploads/2018/08/BJA_Basic_Strategy.jpg)
   
 ### 3. Card Counting Player: The ultimate player
-Use card counting to play according to basci strat and the illustrious 18 deviations.
+Use card counting to play according to the basic strat and the illustrious 18 deviations.
 Bet according to a user specified betting spread.
 Note that card counting player does not quit even with a true count below D1.
 (incorporating both Basic Strat and Card Counting strategies to decide best course of action as well as betting units)
