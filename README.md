@@ -1,6 +1,6 @@
 # BlackJack-Trainer
 
-## Made By: Alex Li and Yifan Zong 
+### Made By: Alex Li and Yifan Zong 
 
 ## General info:
 This project is meant to be used solely for the educational purpose of learning the game of BlackJack
@@ -14,7 +14,7 @@ There are 3 different selectable modes:
   strategy/play at each step)
 ### 2. Basic Strategy Player: CPU plays exactly according to the basic strategy chart
 
-![alt text](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.blackjackapprenticeship.com%2Fblackjack-strategy-charts%2F&psig=AOvVaw38UXC202XucYtXCcmGr4eR&ust=1609474081034000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCNjx56is9-0CFQAAAAAdAAAAABAD)
+![alt text](https://www.blackjackapprenticeship.com/wp-content/uploads/2018/08/BJA_Basic_Strategy.jpg)
   
 ### 3. Card Counting Player: The ultimate player
 (incorporating both Basic Strat and Card Counting strategies to decide best course of action as well as betting units)
