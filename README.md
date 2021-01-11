@@ -8,7 +8,6 @@ For deatails check src code.
 
 ## General info:
 This project is designed to help players learn the basic strategy and card counting strategy in Blackjack.
-Can also be used to simulate the risk of ruins of various betting spreads.
 Uses the "standard" casino rules.
 [Link to basic rules](https://youtu.be/dQw4w9WgXcQ?t=22)
 
