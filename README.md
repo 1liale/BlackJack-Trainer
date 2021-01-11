@@ -1,10 +1,6 @@
 # BlackJack-Trainer
 
-### Made By: Alex Li and Yifan Zong 
-
-## Documentation
-[Link to JavaDoc API](https://1liale.github.io/BlackJack-Trainer/)
-For deatails check src code.
+### Made By: Alex Li and Yifan Zong
 
 ## General info:
 This project is designed to help players learn the basic strategy and card counting strategy in Blackjack.
@@ -34,7 +30,6 @@ Note that card counting player does not quit even with a true count below D1.
 (incorporating both Basic Strat and Card Counting strategies to decide best course of action as well as betting units)
 [Click to learn more about card counting](https://www.youtube.com/watch?v=SHK2C-QQR-k)
 
-
 ## Project Specifications:
 - Project is created using Java 
 - At the present, this program only supports CLI.
@@ -46,9 +41,13 @@ option 1:
 $ download as zip folder
 $ run in ide such as Eclipse or IntelliJ   
 
-option 2:
+option 2 (Recommended):
 $ git clone https://github.com/1liale/BlackJack-Trainer.git
 $ open terminal and go to repo
 $ java -jar "BlackJackTrainer.jar"
 
 ```
+## Documentation
+Check src code.
+Have questions?
+Email zongyf02@gmail.com
