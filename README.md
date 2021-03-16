@@ -50,4 +50,4 @@ $ java -jar "BlackJackTrainer.jar"
 ## Documentation
 Check src code.
 Have questions?
-Email zongyf02@gmail.com
+Email zongyf02@gmail.com a336li@uwaterloo.ca
